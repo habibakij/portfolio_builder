@@ -1,23 +1,11 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class RegistrationController extends GetxController {
-  //TODO: Implement RegistrationController
+  final formKey = GlobalKey<FormState>();
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
 }

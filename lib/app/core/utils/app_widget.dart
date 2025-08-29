@@ -128,10 +128,11 @@ class PhoneNumberField extends StatelessWidget {
   }
 }
 
-class CommonTextField extends StatelessWidget {
+class CommonTextField extends StatefulWidget {
   final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
+  final String? labelText;
   final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final bool obscureText;
@@ -139,12 +140,15 @@ class CommonTextField extends StatelessWidget {
   final void Function(String)? onChanged;
   final void Function()? onTap;
   final int? maxLength;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
 
   const CommonTextField({
     super.key,
     required this.controller,
     required this.focusNode,
     required this.hintText,
+    this.labelText,
     this.keyboardType = TextInputType.text,
     this.inputFormatters,
     this.obscureText = false,
@@ -152,55 +156,87 @@ class CommonTextField extends StatelessWidget {
     this.onChanged,
     this.onTap,
     this.maxLength,
+    this.prefixIcon,
+    this.suffixIcon,
   });
+
+  @override
+  State<CommonTextField> createState() => _CommonTextFieldState();
+}
+
+class _CommonTextFieldState extends State<CommonTextField> {
+  bool _obscure = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscure = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      focusNode: focusNode,
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      obscureText: obscureText,
-      maxLength: maxLength,
+      controller: widget.controller,
+      focusNode: widget.focusNode,
+      keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
+      obscureText: _obscure,
+      maxLength: widget.maxLength,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(left: 10, right: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 14,
+        ),
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon:
+            widget.obscureText
+                ? IconButton(
+                  icon: Icon(
+                    _obscure ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                )
+                : widget.suffixIcon,
         border: OutlineInputBorder(
           borderSide: const BorderSide(width: 1, color: AppColors.dividerColor),
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 1, color: AppColors.textColor),
-          borderRadius: BorderRadius.circular(4.0),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: AppColors.primaryColor,
+          ),
+          borderRadius: BorderRadius.circular(8.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(width: 1, color: AppColors.dividerColor),
-          borderRadius: BorderRadius.circular(4.0),
+          borderRadius: BorderRadius.circular(8.0),
         ),
-        errorBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-          borderSide: BorderSide(width: 1.5, color: AppColors.darkRed),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(width: 1.5, color: AppColors.darkRed),
         ),
         focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(width: 1.5, color: AppColors.darkRed),
-          borderRadius: BorderRadius.circular(4.0),
         ),
-        enabled: true,
-        filled: true,
-        hintText: hintText,
         hintStyle: normalTextStyle(
           fontWeight: FontWeight.w500,
           color: AppColors.textHintColor,
         ),
         fillColor: AppColors.whiteLiteColor,
+        filled: true,
         errorStyle: normalTextStyle(height: 0, fontSize: 0),
-        counterText: "",
+        counterText: widget.maxLength != null ? "" : null,
       ),
-      onTap: onTap,
+      onTap: widget.onTap,
       onTapOutside: (_) => Get.focusScope?.unfocus(),
-      onChanged: onChanged,
-      validator: validator,
+      onChanged: widget.onChanged,
+      validator: widget.validator,
     );
   }
 }

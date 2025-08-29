@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:portfolio_builder/app/core/style/app_color.dart';
 import 'package:portfolio_builder/app/core/style/app_style.dart';
 import 'package:portfolio_builder/app/modules/onboard/controllers/onboard_controller.dart';
+import 'package:portfolio_builder/app/routes/app_pages.dart';
 
 class OnboardView extends GetView<OnboardController> {
   const OnboardView({super.key});
@@ -11,64 +13,66 @@ class OnboardView extends GetView<OnboardController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        body: Stack(
+        body: Column(
           children: [
             /// Background PageView (full screen images)
-            PageView.builder(
-              controller: controller.pageController,
-              itemCount: controller.pages.length,
-              onPageChanged: (index) {
-                controller.currentPage.value = index;
-              },
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(controller.pages[index]["image"]!),
-                      fit: BoxFit.cover,
+            Expanded(
+              child: PageView.builder(
+                controller: controller.pageController,
+                itemCount: controller.pages.length,
+                onPageChanged: (index) {
+                  controller.currentPage.value = index;
+                },
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(controller.pages[index]["image"]!),
+                        fit: BoxFit.fitHeight,
+                      ),
                     ),
-                  ),
-                  child: Container(color: Colors.black.withValues(alpha: .4)),
-                );
-              },
+                    child: Container(
+                      color: AppColors.black.withValues(alpha: .4),
+                    ),
+                  );
+                },
+              ),
             ),
 
             /// Foreground content
-            SafeArea(
+            Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.primaryColor,
+                    AppColors.secondaryColor,
+                  ], // purple gradient
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      children: [
-                        Text(
-                          controller.pages[controller
-                              .currentPage
-                              .value]["title"]!,
-                          textAlign: TextAlign.center,
-                          style: titleTextStyle(
-                            fontSize: 28.0,
-
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          controller.pages[controller
-                              .currentPage
-                              .value]["subtitle"]!,
-                          textAlign: TextAlign.center,
-                          style: normalTextStyle(
-                            fontSize: 16.0,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
+                  Text(
+                    controller.pages[controller.currentPage.value]["title"]!,
+                    textAlign: TextAlign.center,
+                    style: titleTextStyle(
+                      fontSize: 28.0,
+                      color: AppColors.white,
                     ),
                   ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 12.0),
+                  Text(
+                    controller.pages[controller.currentPage.value]["subtitle"]!,
+                    textAlign: TextAlign.center,
+                    style: normalTextStyle(
+                      fontSize: 16.0,
+                      color: AppColors.whiteLiteColor,
+                    ),
+                  ),
+                  const SizedBox(height: 12.0),
 
                   /// Page Indicator
                   Row(
@@ -83,14 +87,14 @@ class OnboardView extends GetView<OnboardController> {
                         decoration: BoxDecoration(
                           color:
                               controller.currentPage.value == index
-                                  ? Colors.white
-                                  : Colors.grey,
+                                  ? AppColors.white
+                                  : AppColors.grey,
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 12.0),
 
                   /// Buttons
                   Padding(
@@ -112,7 +116,7 @@ class OnboardView extends GetView<OnboardController> {
                               child: Text(
                                 "Skip",
                                 style: normalTextStyle(
-                                  color: Colors.white70,
+                                  color: AppColors.whiteLiteColor,
                                   fontSize: 16,
                                 ),
                               ),
@@ -120,8 +124,8 @@ class OnboardView extends GetView<OnboardController> {
                             : const SizedBox.shrink(),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.black,
+                            backgroundColor: AppColors.white,
+                            foregroundColor: AppColors.black,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 24,
                               vertical: 12,
@@ -133,7 +137,7 @@ class OnboardView extends GetView<OnboardController> {
                           onPressed: () {
                             if (controller.currentPage.value ==
                                 controller.pages.length - 1) {
-                              Navigator.pushReplacementNamed(context, '/home');
+                              Get.toNamed(Routes.LOGIN);
                             } else {
                               controller.pageController.nextPage(
                                 duration: const Duration(milliseconds: 300),
@@ -151,7 +155,6 @@ class OnboardView extends GetView<OnboardController> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
