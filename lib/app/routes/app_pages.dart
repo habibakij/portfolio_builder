@@ -24,30 +24,35 @@ class AppPages {
 
   static final routes = [
     GetPage(
-        name: _Paths.SPLASH,
-        page: () => const SplashView(),
-        binding: SplashBinding()),
+      name: _Paths.SPLASH,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
     GetPage(
-        name: _Paths.LOGIN,
-        page: () => const LoginView(),
-        binding: LoginBinding()),
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+    ),
     GetPage(
       name: _Paths.REGISTRATION,
       page: () => const RegistrationView(),
       binding: RegistrationBinding(),
     ),
     GetPage(
-        name: _Paths.HOME,
-        page: () => const HomeView(),
-        binding: HomeBinding()),
+      name: _Paths.HOME,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
+    ),
     GetPage(
-        name: _Paths.PROFILE,
-        page: () => const ProfileView(),
-        binding: ProfileBinding()),
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
+    ),
     GetPage(
-        name: _Paths.PORFOLIO,
-        page: () => const PorfolioView(),
-        binding: PorfolioBinding()),
+      name: _Paths.PORFOLIO,
+      page: () => const PorfolioView(),
+      binding: PorfolioBinding(),
+    ),
     GetPage(
       name: _Paths.ONBOARD,
       page: () => const OnboardView(),
