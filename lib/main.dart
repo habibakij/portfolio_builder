@@ -12,7 +12,9 @@ void main() {
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       initialBinding: InitialBinding(),
-      defaultTransition: Transition.cupertino,
+      defaultTransition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 300),
+      popGesture: true,
     ),
   );
 }

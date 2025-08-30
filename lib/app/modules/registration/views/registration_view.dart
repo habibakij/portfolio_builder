@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:portfolio_builder/app/core/style/app_color.dart';
-
-import '../controllers/registration_controller.dart';
+import 'package:portfolio_builder/app/core/style/app_style.dart';
+import 'package:portfolio_builder/app/core/utils/app_widget.dart';
+import 'package:portfolio_builder/app/modules/registration/controllers/registration_controller.dart';
 
 class RegistrationView extends GetView<RegistrationController> {
   const RegistrationView({super.key});
@@ -34,123 +34,114 @@ class RegistrationView extends GetView<RegistrationController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
+                      Text(
                         "Create Account",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                        style: titleTextStyle(
+                          fontSize: 32.0,
                           color: AppColors.primaryColor,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      AppWidget().spaceH(24.0),
 
                       // Name Field
-                      TextFormField(
+                      CommonTextField(
                         controller: controller.nameController,
-                        decoration: InputDecoration(
-                          labelText: "Full Name",
-                          prefixIcon: const Icon(Icons.person),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        validator:
-                            (value) =>
-                                value!.isEmpty ? "Enter your name" : null,
+                        focusNode: controller.nameFocus,
+                        hintText: "Full name",
+                        labelText: "Name",
+                        keyboardType: TextInputType.name,
+                        prefixIcon: const Icon(Icons.person),
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return "Name is required";
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 16),
+                      AppWidget().spaceH(16.0),
 
                       // Email Field
-                      TextFormField(
+                      CommonTextField(
                         controller: controller.emailController,
-                        decoration: InputDecoration(
-                          labelText: "Email",
-                          prefixIcon: const Icon(Icons.email),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        validator:
-                            (value) =>
-                                value!.isEmpty ? "Enter your email" : null,
+                        focusNode: controller.emailFocus,
+                        hintText: "Enter your email",
+                        labelText: "Email",
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return "Email required";
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value))
+                            return "Invalid email";
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 16),
+                      AppWidget().spaceH(16.0),
 
-                      // Phone Field
-                      TextFormField(
+                      /// Phone
+                      CommonTextField(
                         controller: controller.phoneController,
+                        focusNode: controller.phoneFocus,
+                        labelText: "Phone Number",
+                        hintText: "Enter your phone number",
+                        prefixIcon: Icon(Icons.phone),
                         keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          labelText: "Phone",
-                          prefixIcon: const Icon(Icons.phone),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        validator:
-                            (value) =>
-                                value!.isEmpty ? "Enter your phone" : null,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your phone number";
+                          }
+                          if (value.length < 10) {
+                            return "Enter a valid phone number";
+                          }
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 16),
+                      AppWidget().spaceH(16.0),
 
                       // Password Field
-                      TextFormField(
+                      CommonTextField(
                         controller: controller.passwordController,
+                        focusNode: controller.passwordFocus,
+                        hintText: "Enter your password",
+                        labelText: "Password",
                         obscureText: true,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          prefixIcon: const Icon(Icons.lock),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        validator:
-                            (value) =>
-                                value!.isEmpty ? "Enter your password" : null,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        validator: (value) {
+                          if (value == null || value.isEmpty)
+                            return "Password required";
+                          if (value.length < 6) return "Min 6 characters";
+                          return null;
+                        },
                       ),
-                      const SizedBox(height: 24),
+                      AppWidget().spaceH(24.0),
 
                       // Sign Up Button
-                      SizedBox(
+                      CommonButton(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            backgroundColor: AppColors.primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: () {
-                            if (controller.formKey.currentState!.validate()) {
-                              // Handle signup action
-                            }
-                          },
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
+                        buttonTitle: "Sign Up",
+                        titleStyle: titleTextStyle(color: AppColors.white),
+                        onPressed: () {
+                          if (controller.formKey.currentState!.validate()) {
+                            // Handle signup action
+                          }
+                        },
                       ),
-
-                      const SizedBox(height: 16),
+                      AppWidget().spaceH(16.0),
 
                       // Already have account
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Already have an account?"),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
+                          Text(
+                            "Already have an account?",
+                            style: normalTextStyle(),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Get.back();
                             },
-                            child: const Text(
-                              "Login",
-                              style: TextStyle(
+                            child: Text(
+                              " Login",
+                              style: normalTextStyle(
                                 color: AppColors.primaryColor,
                                 fontWeight: FontWeight.bold,
                               ),

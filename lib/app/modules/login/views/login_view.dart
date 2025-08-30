@@ -30,21 +30,20 @@ class LoginView extends GetView<LoginController> {
                 children: [
                   /// App Logo / Title
                   const Icon(Icons.person_pin, size: 90, color: Colors.white),
-                  const SizedBox(height: 16),
-                  const Text(
+                  AppWidget().spaceH(16.0),
+                  Text(
                     "Welcome Back!",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                    style: titleTextStyle(
+                      fontSize: 32.0,
+                      color: AppColors.white,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  AppWidget().spaceH(8.0),
                   const Text(
                     "Login to continue",
                     style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
-                  const SizedBox(height: 40),
+                  AppWidget().spaceH(40.0),
 
                   /// Login Card
                   Container(
@@ -60,136 +59,131 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ],
                     ),
-                    child: Column(
-                      children: [
-                        /// Email
-                        CommonTextField(
-                          controller: controller.emailController,
-                          focusNode: controller.emailFocus,
-                          hintText: "Enter your email",
-                          labelText: "Email",
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email_outlined),
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return "Email required";
-                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value))
-                              return "Invalid email";
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        /// Password
-                        CommonTextField(
-                          controller: controller.passwordController,
-                          focusNode: controller.passwordFocus,
-                          hintText: "Enter your password",
-                          labelText: "Password",
-                          obscureText: true,
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          validator: (value) {
-                            if (value == null || value.isEmpty)
-                              return "Password required";
-                            if (value.length < 6) return "Min 6 characters";
-                            return null;
-                          },
-                        ),
-                        //const SizedBox(height: 30),
-
-                        /// Forgot Password
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              "Forgot Password?",
-                              style: TextStyle(color: AppColors.primaryColor),
-                            ),
+                    child: Form(
+                      key: controller.formKey,
+                      child: Column(
+                        children: [
+                          /// Email
+                          CommonTextField(
+                            controller: controller.emailController,
+                            focusNode: controller.emailFocus,
+                            hintText: "Enter your email",
+                            labelText: "Email",
+                            keyboardType: TextInputType.emailAddress,
+                            prefixIcon: const Icon(Icons.email_outlined),
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return "Email required";
+                              if (!RegExp(
+                                r'^[^@]+@[^@]+\.[^@]+',
+                              ).hasMatch(value))
+                                return "Invalid email";
+                              return null;
+                            },
                           ),
-                        ),
-                        const SizedBox(height: 24),
+                          AppWidget().spaceH(16.0),
 
-                        /// Login Button
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              backgroundColor: AppColors.primaryColor,
-                              foregroundColor: AppColors.white,
-                            ),
-                            onPressed: () {},
-                            child: Text(
-                              "Login",
-                              style: titleTextStyle(color: AppColors.white),
-                            ),
+                          /// Password
+                          CommonTextField(
+                            controller: controller.passwordController,
+                            focusNode: controller.passwordFocus,
+                            hintText: "Enter your password",
+                            labelText: "Password",
+                            obscureText: true,
+                            prefixIcon: const Icon(Icons.lock_outline),
+                            validator: (value) {
+                              if (value == null || value.isEmpty)
+                                return "Password required";
+                              if (value.length < 6) return "Min 6 characters";
+                              return null;
+                            },
                           ),
-                        ),
-                        const SizedBox(height: 20),
 
-                        /// OR Divider
-                        Row(
-                          children: const [
-                            Expanded(child: Divider(thickness: 1)),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Text("OR"),
-                            ),
-                            Expanded(child: Divider(thickness: 1)),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-
-                        /// Social Login Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.facebook,
-                                color: Colors.blue,
-                                size: 32,
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.g_mobiledata,
-                                color: Colors.red,
-                                size: 40,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-
-                        /// Signup Link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text("Don't have an account? "),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.REGISTRATION);
-                              },
+                          /// Forgot Password
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
-                                "Sign Up",
-                                style: normalTextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontWeight: FontWeight.bold,
+                                "Forgot Password?",
+                                style: TextStyle(color: AppColors.primaryColor),
+                              ),
+                            ),
+                          ),
+                          AppWidget().spaceH(24.0),
+
+                          /// Login Button
+                          CommonButton(
+                            width: double.infinity,
+                            buttonTitle: "Login",
+                            titleStyle: titleTextStyle(color: AppColors.white),
+                            onPressed: () {
+                              if (controller.formKey.currentState!.validate()) {
+                                Get.offNamed(Routes.HOME);
+                              }
+                            },
+                          ),
+                          AppWidget().spaceH(20.0),
+
+                          /// OR Divider
+                          Row(
+                            children: const [
+                              Expanded(child: Divider(thickness: 1)),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Text("OR"),
+                              ),
+                              Expanded(child: Divider(thickness: 1)),
+                            ],
+                          ),
+                          AppWidget().spaceH(20.0),
+
+                          /// Social Login Buttons
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.facebook,
+                                  color: Colors.blue,
+                                  size: 32,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              const SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.g_mobiledata,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
+                              ),
+                            ],
+                          ),
+                          AppWidget().spaceH(16.0),
+
+                          /// Signup Link
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Don't have an account? "),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.REGISTRATION);
+                                },
+                                child: Text(
+                                  "Sign Up",
+                                  style: normalTextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
